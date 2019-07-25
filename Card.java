@@ -4,7 +4,7 @@ class Card{
 
     private final String suit;
     private final int value;
-    private final List<String> suits = new gstList<String>;
+    private final List<String> suits = new List<String>;
 
     /* Constructor */
     public Card(String suit, int value) {
