@@ -1,23 +1,18 @@
-import java.util.List;
+import java.util.ArrayList;
 
-class Card{
+public class Card{
+
+    /* Constructor */
+
+    public Card(String suit, int value) {
+        this.suit = suit; //
+        this.value = value; //values are 1-13 the game should calculate the value for each card since many games
+        // assign values to cards differently.
+    }
+        public String getSuit() { return suit; }
+
+        public int getValue() { return value; }
 
     private final String suit;
     private final int value;
-    private final List<String> suits = new List<String>;
-
-    /* Constructor */
-    public Card(String suit, int value) {
-        this.suit = suit;
-        this.value = value;
-    }
-
-        public String getSuit(Card c){
-            return c.suit;
-        }
-
-        public int getValue(Card c){
-            return c.value;
-        }
-
-    }
+}
