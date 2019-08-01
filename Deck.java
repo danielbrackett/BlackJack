@@ -4,43 +4,46 @@ import java.util.Random;
 
 public class Deck{
 
-    public Deck deck;
-    public String[] SUITS = {"Clubs", "Diamonds", "Hearts", "Spades"};
-    private ArrayList<Card> cards = new ArrayList<>(52);
+    private final String[] SUITS = {"Clubs", "Diamonds", "Hearts", "Spades"};
+    private ArrayList<Card> deck = new ArrayList<>(52);
 
     public Deck() {
-        deck.createDeck();
+        this.createDeck();
     }
 
-    public Deck shuffle() {
-        for (int i = 0; i < cards.size(); i++) {
-            Card currentCard = cards.get(i);
-            Random rand = new Random();
+    public void shuffle() {
+        Random rand = new Random();
+        for (int i = 0; i < deck.size(); i++) {
+            Card currentCard = deck.get(i);
             int value = rand.nextInt(86317389);
             int swapIndex = value % this.getDeckSize();
-            Card temp = cards.get(swapIndex);
-            cards.set(swapIndex, currentCard);
-            cards.set(i, temp);
+            Card temp = deck.get(swapIndex);
+            deck.set(swapIndex, currentCard);
+            deck.set(i, temp);
         }
-        return deck;
     }
 
     /*
     make one card of each value(1-13) for each suit.
     iterate over the suits and for each one make a value 1-13
     */
-    public ArrayList<Card> createDeck() {
+    private void createDeck() {
         for (String suitName : SUITS) {
             for (int i = 1; i <= 13; i++) {
                 Card c = new Card(suitName, i);
-                cards.add(c);
+                deck.add(c);
             }
         }
-        return cards;
     }
 
     public int getDeckSize() {
-        return cards.size();
+        return deck.size();
+    }
+    
+    public void printDeck() {
+        for (Card card : deck) {
+            System.out.println(card.ToString());
+        }
     }
 
 }
