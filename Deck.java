@@ -11,18 +11,6 @@ public class Deck{
         this.createDeck();
     }
 
-    public void shuffle() {
-        Random rand = new Random();
-        for (int i = 0; i < deck.size(); i++) {
-            Card currentCard = deck.get(i);
-            int value = rand.nextInt(86317389);
-            int swapIndex = value % this.getDeckSize();
-            Card temp = deck.get(swapIndex);
-            deck.set(swapIndex, currentCard);
-            deck.set(i, temp);
-        }
-    }
-
     /*
     make one card of each value(1-13) for each suit.
     iterate over the suits and for each one make a value 1-13
@@ -33,6 +21,18 @@ public class Deck{
                 Card c = new Card(suitName, i);
                 deck.add(c);
             }
+        }
+    }
+
+    public void shuffle() {
+        Random rand = new Random();
+        for (int i = 0; i < deck.size(); i++) {
+            Card currentCard = deck.get(i);
+            int value = rand.nextInt(86317389);
+            int swapIndex = value % this.getDeckSize();
+            Card temp = deck.get(swapIndex);
+            deck.set(swapIndex, currentCard);
+            deck.set(i, temp);
         }
     }
 
