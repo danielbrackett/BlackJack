@@ -13,6 +13,10 @@ public class Card{
 
         public int getValue() { return value; }
 
+        public String ToString() {
+            return "the " + this.getValue() + " of " + this.getSuit();
+        }
+
     private final String suit;
     private final int value;
 }
