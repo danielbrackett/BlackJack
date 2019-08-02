@@ -2,8 +2,10 @@ public class Player {
 
     public boolean isDealer;
     private Hand hand;
+    String playerName;
 
-    public Player(){
+    public Player(String playerName) {
+        this.playerName = playerName;
         setHand(new Hand());
         int bank = 100; //relates to the winnings. can they still play.
     }
@@ -18,6 +20,14 @@ public class Player {
 
     public void doubleDown() {
 
+    }
+
+    public void printPlayerName() {
+        System.out.print(this.playerName);
+    }
+
+    public String getPlayerName() {
+        return this.playerName;
     }
 
     protected Hand getHand() {
