@@ -14,7 +14,19 @@ public class Card{
         public int getValue() { return value; }
 
         public String ToString() {
-            return "the " + this.getValue() + " of " + this.getSuit();
+            if (this.getValue() >= 2 && this.getValue() <= 10) {
+                return "the " + this.getValue() + " of " + this.getSuit();
+            } else if (this.getValue() == 1) {
+                return "the Ace of " + this.getSuit();
+            } else if (this.getValue() == 11) {
+                return "the Jack of " + this.getSuit();
+            } else if (this.getValue() == 12) {
+                return "the Queen of " + this.getSuit();
+            }  else if (this.getValue() == 13) {
+                return "the King of " + this.getSuit();
+            } else {
+                return "Card Value Error. value is outside of acceptable range.";
+            }
         }
 
     private final String suit;
