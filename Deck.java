@@ -36,6 +36,13 @@ public class Deck{
         }
     }
 
+    public Card dealOneCardFromDeck() {
+        Card cardDealt = deck.get(0);
+        deck.remove(0);
+        System.out.println(cardDealt.ToString()+ " which was just dealt.");
+        return cardDealt;
+    }
+
     public int getDeckSize() {
         return deck.size();
     }
