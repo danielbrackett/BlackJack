@@ -8,9 +8,11 @@ public class GameRunner {
         Deck deck = new Deck();
         deck.shuffle();
         game.deal(deck);
+//        deck.printDeck();
+//        System.out.println("one card print test");
+        System.out.println(deck.getDeckSize());
 
-
-        deck.printDeck();
+//        deck.dealOneCardFromDeck();
     }
 
     private ArrayList<Player> players;
@@ -52,24 +54,22 @@ public class GameRunner {
         }
     }
 
-    /*
-
-     */
-
     /**
      * deals the first hand to each player and the dealer.
      * @param deckInPlay this is the deck currently being used to play a game.
      */
     public void deal(Deck deckInPlay) {
         if (deckInPlay.getDeckSize() > (3 * players.size())) {
-            for (Player player: players) {
-                if (player.getHand().getHandSize() < 2) {
-                    //the proceeding section might benefit from a refactor.
+            int twoCards = 0;
+            while (twoCards < 2) {
+                for (Player player: players) {
+                    // the proceeding section might benefit from a refactor.
                     // as maybe; player.getHand().addCardToHand(deckInPlay.dealOneCardFromDeck());
                     Card cardDealt = deckInPlay.dealOneCardFromDeck();
                     Hand hand = player.getHand();
                     hand.addCardToHand(cardDealt);
                 }
+                twoCards++;
             }
         }
     }
