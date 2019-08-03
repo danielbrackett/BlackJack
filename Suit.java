@@ -1,4 +1,6 @@
-package PACKAGE_NAME;
-
 public enum Suit {
+    CLUBS,
+    DIAMONDS,
+    HEARTS,
+    SPADES;
 }
