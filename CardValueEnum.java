@@ -1,4 +1,4 @@
-public enum CardValue {
+public enum CardValueEnum {
 
     ACE(11),
     TWO(2),
@@ -14,14 +14,14 @@ public enum CardValue {
     QUEEN(10),
     KING(10);
 
-    private int value;
+    private int points;
 
-    CardValue (int value)
+    CardValueEnum (int points)
     {
-        this.value = value;
+        this.points = points;
     }
 
-    public int getCardValue() {
-        return value;
+    public int getCardPoints() {
+        return points;
     }
 }
