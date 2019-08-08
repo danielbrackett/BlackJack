@@ -7,11 +7,18 @@ public class GameRunner {
 //may split this up this to make it a black jack runner and a general game runner.
 
     public static void main(String[] args) {
-        Scanner userInput = new Scanner(System.in);
         GameRunner game = new GameRunner();
+        Scanner userInput = new Scanner(System.in);
+        System.out.println("What is your name?");
+        String playerName = userInput.nextLine();
+        game.players.get(1).setPlayerName(playerName);
+        System.out.println("Let's play some BlackJack, " + playerName);
         Deck deck = new Deck();
         deck.shuffle();
         game.deal(deck);
+        System.out.println(playerName + " will you hit or stand");
+        String hitOrStand = userInput.nextLine();
+
         game.evalPlayersHands(game.players);
 
 //        deck.printDeck();
@@ -99,13 +106,17 @@ public class GameRunner {
         }
     }
 
-    public boolean bustOrNot (Player player) {
-        int points = player.getHand().valueOfCardsInHand();
-        if (points <= 21) {
-                System.out.println(player.getPlayerName() + " " + points + " points");
-        }
-        return valGT21(player);
+    public void hitOrStand(String text) {
+        return;
     }
+
+//    public boolean bustOrNot (Player player) {
+//        int points = player.getHand().valueOfCardsInHand();
+//        if (points <= 21) {
+//                System.out.println(player.getPlayerName() + " " + points + " points");
+//        }
+//        return valGT21(player);
+//    }
 
 //    public boolean valGT21(@NotNull Player player) {
 //

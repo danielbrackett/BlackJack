@@ -2,7 +2,7 @@ class Player {
 
     public boolean isDealer;
     private Hand hand;
-    private final String playerName;
+    private String playerName;
 
     public Player(String playerName) {
         this.playerName = playerName;
@@ -28,6 +28,10 @@ class Player {
 
     public String getPlayerName() {
         return this.playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     public Hand getHand() {
