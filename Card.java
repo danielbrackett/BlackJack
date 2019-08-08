@@ -1,6 +1,6 @@
 import org.jetbrains.annotations.Contract;
 
-public class Card{
+public class Card {
 
     /* Constructor */
 
@@ -10,13 +10,19 @@ public class Card{
         this.cardValue = cardValue; //values are 1-11 the game should calculate the value for each card since many games
         // assign values to cards differently.
     }
-        private Suit getSuit() { return suit; }
 
-        CardValueEnum getCardValueEnum() { return cardValue; }
+    public Suit getSuit() {
+        return suit;
+    }
 
-        String ToString() {
-                return "the " + this.getCardValueEnum() + " of " + this.getSuit();
-        }
+    public CardValueEnum getCardValueEnum() {
+        return cardValue;
+    }
+
+    @Override
+    public String toString() {
+        return "the " + this.getCardValueEnum() + " of " + this.getSuit();
+    }
 
     private final Suit suit;
     private final CardValueEnum cardValue;

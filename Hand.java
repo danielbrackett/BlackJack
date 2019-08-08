@@ -2,9 +2,7 @@ import java.util.ArrayList;
 
 public class Hand {
 
-     final ArrayList<Card> cardsInHand;
-    private boolean isWinningHand;
-    private int valueOfCards;
+    private final ArrayList<Card> cardsInHand;
 
     public Hand() {
         cardsInHand = new ArrayList<>(); //cards dealt to a player not to exceed 21.
@@ -15,28 +13,27 @@ public class Hand {
     }
 
     public int valueOfCardsInHand() {
-        for (Card card: this.cardsInHand) {
-            valueOfCards += card.getCardValueEnum().getCardPoints();
+        int value = 0;
+        for (Card card : this.cardsInHand) {
+            value += card.getCardValueEnum().getCardPoints();
         }
-        return valueOfCards;
+        return value;
     }
-
-    public void printCardsInHand() {
-        for (Card card: cardsInHand) {
-            System.out.println(card.ToString());
-        }
-    }
-
-    public boolean isWinning() {
-        return isWinningHand;
-    }
-
-    public void setWinningHand(boolean b) {
-        isWinningHand = b;
-    }
-
 
     public int getHandSize() {
-        return  cardsInHand.size();
+        return cardsInHand.size();
+    }
+
+    @Override
+    public String toString() {
+        String retVal = "";
+        for (Card card : cardsInHand) {
+            retVal += card.toString();
+            if (cardsInHand.indexOf(card) != cardsInHand.size()) {
+                retVal += ", ";
+            }
+        }
+        retVal += ". Total value: " + valueOfCardsInHand();
+        return retVal;
     }
 }

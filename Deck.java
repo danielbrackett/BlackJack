@@ -48,7 +48,7 @@ class Deck{
     public Card dealOneCardFromDeck() {
         Card cardDealt = deck.get(0);
         deck.remove(0);
-        System.out.println(cardDealt.ToString()+ " which was just dealt.");
+//        System.out.println(cardDealt + " which was just dealt.");
         return cardDealt;
     }
 
@@ -65,7 +65,7 @@ class Deck{
      */
     public void printDeck() {
         for (Card card : deck) {
-            System.out.println(card.ToString());
+            System.out.println(card);
         }
     }
 
