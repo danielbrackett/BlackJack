@@ -136,8 +136,7 @@ public class GameRunner {
     /**
      * call this method when a player wins.
      */
-    public void announceTheWinner(Player player) {
+    public void announceTheWinner(@NotNull Player player) {
         System.out.println(player.getPlayerName() +  " Wins!!");
-        }
     }
 }
