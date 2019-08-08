@@ -2,10 +2,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+class Deck{
 
-public class Deck{
-
-    private ArrayList<Card> deck = new ArrayList<>(52);
+    private final ArrayList<Card> deck = new ArrayList<>(52);
 
     public Deck() {
         this.createDeck();

@@ -1,27 +1,32 @@
+import org.jetbrains.annotations.NotNull;
+import java.util.Scanner;
+
 import java.util.ArrayList;
 
 public class GameRunner {
 //may split this up this to make it a black jack runner and a general game runner.
 
     public static void main(String[] args) {
+        Scanner userInput = new Scanner(System.in);
         GameRunner game = new GameRunner();
         Deck deck = new Deck();
         deck.shuffle();
         game.deal(deck);
+        game.evalPlayersHands(game.players);
+
 //        deck.printDeck();
 //        System.out.println("one card print test");
-        System.out.println(deck.getDeckSize());
-
+//        System.out.println(deck.getDeckSize());
 //        deck.dealOneCardFromDeck();
     }
 
     private ArrayList<Player> players;
-    int numberOfPlayers;
+    private int numberOfPlayers;
 
     /**
      * Default constructor, allows for 2 'players' one dealer and one gambler.
      */
-    public GameRunner() {
+    private GameRunner() {
         players = new ArrayList<>();
         createPlayers(2);
     }
@@ -40,7 +45,8 @@ public class GameRunner {
 
     /**
      * Create the number of players specified for a game.
-     * @param numberOfPlayers
+     * @param numberOfPlayers takes that number of players from the constructor. if no int is specified then the
+     *                        default constructor makes 2 players: 1 dealer & 1 player.
      */
     private void createPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
@@ -58,7 +64,7 @@ public class GameRunner {
      * deals the first hand to each player and the dealer.
      * @param deckInPlay this is the deck currently being used to play a game.
      */
-    public void deal(Deck deckInPlay) {
+    private void deal(@NotNull Deck deckInPlay) {
         if (deckInPlay.getDeckSize() > (3 * players.size())) {
             int twoCards = 0;
             while (twoCards < 2) {
@@ -74,6 +80,39 @@ public class GameRunner {
         }
     }
 
+    public void evalPlayersHands(@NotNull ArrayList<Player> players) {
+        //only adding everything up for the moment.
+        int totalInHand = 0;
+        int dealerPoints = players.get(0).getHand().valueOfCardsInHand();
+        System.out.println(players.get(0).getPlayerName() + " " + dealerPoints + " points");
+        for (int i = 1; i < players.size(); i++) {
+            int points = players.get(i).getHand().valueOfCardsInHand();
+            this.isNatural21(players.get(i));
+            System.out.println(players.get(i).getPlayerName() + " " + points + " points");
+            }
+    }
+
+    public void isNatural21(@NotNull Player player) {
+        if (player.getHand().valueOfCardsInHand() == 21 && player.getHand().getHandSize() == 2) {
+            player.getHand().setWinningHand(true);
+            this.announceTheWinner(player);
+        }
+    }
+
+    public boolean bustOrNot (Player player) {
+        int points = player.getHand().valueOfCardsInHand();
+        if (points <= 21) {
+                System.out.println(player.getPlayerName() + " " + points + " points");
+        }
+        return valGT21(player);
+    }
+
+//    public boolean valGT21(@NotNull Player player) {
+//
+//        if(player.getHand().cardsInHand.contains(Card))
+//        return true;
+//    }
+
     /**
      * this method may be determined to be unnecessary. further work must be done.
      * however, will continue to play with sufficient cards for all players.
@@ -81,5 +120,13 @@ public class GameRunner {
      */
     public boolean continuePlay() {
         return true;
+    }
+
+    /**
+     * call this method when a player wins.
+     */
+    public void announceTheWinner(Player player) {
+        System.out.println(player.getPlayerName() +  " Wins!!");
+        }
     }
 }

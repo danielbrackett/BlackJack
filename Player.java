@@ -1,8 +1,8 @@
-public class Player {
+class Player {
 
     public boolean isDealer;
     private Hand hand;
-    String playerName;
+    private final String playerName;
 
     public Player(String playerName) {
         this.playerName = playerName;
@@ -30,11 +30,15 @@ public class Player {
         return this.playerName;
     }
 
-    protected Hand getHand() {
+    public Hand getHand() {
         return hand;
     }
 
-    protected void setHand(Hand hand) {
+    public boolean isWinningHand() {
+        return getHand().isWinning();
+    }
+
+    private void setHand(Hand hand) {
         this.hand = hand;
     }
 }

@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.Contract;
+
 public enum CardValueEnum {
 
     ACE(11),
@@ -14,13 +16,15 @@ public enum CardValueEnum {
     QUEEN(10),
     KING(10);
 
-    private int points;
+    private final int points;
 
+    @Contract(pure = true)
     CardValueEnum (int points)
     {
         this.points = points;
     }
 
+    @Contract(pure = true)
     public int getCardPoints() {
         return points;
     }
