@@ -19,8 +19,7 @@ public enum CardValueEnum {
     private final int points;
 
     @Contract(pure = true)
-    CardValueEnum (int points)
-    {
+    CardValueEnum(int points) {
         this.points = points;
     }
 

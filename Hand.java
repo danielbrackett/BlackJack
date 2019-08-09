@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Hand {
 
-    private final ArrayList<Card> cardsInHand;
+    public final ArrayList<Card> cardsInHand;
 
     public Hand() {
         cardsInHand = new ArrayList<>(); //cards dealt to a player not to exceed 21.

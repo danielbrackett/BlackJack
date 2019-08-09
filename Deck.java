@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-class Deck{
+class Deck {
 
     private final ArrayList<Card> deck = new ArrayList<>(52);
 
@@ -12,10 +12,10 @@ class Deck{
 
     /**
      * make one card of each value(1-13) for each suit.
-     *     iterate over the suits and for each one make a value 1-13
+     * iterate over the suits and for each one make a value 1-13
      */
     private void createDeck() {
-        for (Suit suitName: Suit.values()) {
+        for (Suit suitName : Suit.values()) {
             for (int i = 0; i <= 12; i++) {
                 Card c = new Card(suitName, CardValueEnum.values()[i]);
                 deck.add(c);
@@ -53,7 +53,6 @@ class Deck{
     }
 
     /**
-     *
      * @return the total number of cards remaining in the deck in play.
      */
     public int getDeckSize() {
