@@ -12,6 +12,10 @@ public class Hand {
         this.cardsInHand.add(card);
     }
 
+    public void discardAllCardsFromHand() {
+        this.cardsInHand.clear();
+    }
+
     public int valueOfCardsInHand() {
         int value = 0;
         for (Card card : this.cardsInHand) {

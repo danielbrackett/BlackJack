@@ -1,7 +1,7 @@
 import org.jetbrains.annotations.NotNull;
-import java.util.Scanner;
 
-import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameRunner {
 //may split this up this to make it a black jack runner and a general game runner.
@@ -20,59 +20,118 @@ public class GameRunner {
         return player;
     }
 
-    public void run()
-    {
+    public void run() {
         Scanner userInput = new Scanner(System.in);
         System.out.println("What is your name?");
         String playerName = userInput.nextLine();
-        player.setPlayerName(playerName);
-        System.out.println("Let's play some BlackJack, " + playerName);
+        getPlayer().setPlayerName(playerName);
+        System.out.println("Let's play some BlackJack, " + playerName + ".");
 
         Deck deck = new Deck(); //
         deck.shuffle();
 
-        while (stillPlaying) {
-            deal(deck);
-            System.out.println("Dealer cards: ");
-            System.out.println(dealer.getHand());
-            System.out.println("Player 1 cards: ");
-            System.out.println(player.getHand());
-            Player winner = evalFirstRoundPlayersHands();
-            if (winner != null) {
-                System.out.println(winner);
-                continue;
+        while (stillPlaying) { //if either busts then play is over. if
+            if (player.getHand().cardsInHand.isEmpty()) {
+                deal(deck);
+                System.out.println(getDealer().getPlayerName() + "'s cards: ");
+                System.out.println(dealer.getHand().cardsInHand.get(0));
+                System.out.println(getPlayer().getPlayerName() + "'s cards: ");
+                System.out.println(player.getHand());
+                Player winner = evalFirstRoundPlayersHands();
+                if (winner != null) {
+                    System.out.println(winner.getPlayerName() + " winner winner chicken dinner!");
+                    continue;
+                }
             }
-            System.out.println(playerName + " will you hit or stand");
 
-            String hitOrStand = userInput.nextLine();
+            AtomicBoolean anotherCard = new AtomicBoolean(evaluator.isPlayersHandLT21(player));
+            System.out.println(anotherCard + " = another card");
+
+            if (anotherCard.get()) {
+                System.out.println(getPlayer().getPlayerName() + " will you hit or stand");
+                String decision = userInput.nextLine();
+                AtomicBoolean hit = new AtomicBoolean(hitOrStand(decision));
+                if (hit.get()) {
+                    player.getHand().addCardToHand(deck.dealOneCardFromDeck());
+                    System.out.println(getPlayer().getPlayerName() + "'s cards + one: ");
+                    System.out.println(player.getHand());
+                    if (evaluator.isBusted(player)) {
+                        System.out.println("b+Busted !!");
+                        anotherCard.set(false); //IDE doesn't understand me.  this is very much used.
+                    }
+                } else {
+                    System.out.println(getPlayer().getPlayerName() + "'s cards + None: ");
+                    System.out.println(player.getHand());
+                    if (evaluator.didPlayerWin(player, dealer)) {
+                        hit.set(false);
+                        anotherCard.set(false);
+                    }
+                }
+            }
+
+            if (dealer.getHand().valueOfCardsInHand() < 17) {
+                dealer.getHand().addCardToHand(deck.dealOneCardFromDeck());
+
+            }
+
+            if (evaluator.isBusted(player)) {
+                System.out.println("oops that's a bust buster. lol");
+                AllHandsAreDiscarded();
+                System.out.println("would you like to play another Round? 'yes' or 'no' ?");
+                String nextRound = userInput.nextLine();
+                if (playAnotherRound(nextRound)) {
+                    stillPlaying = true;
+                } else {
+                    System.out.println(playerName + ", goodbye for now.");
+                    stillPlaying = false;
+                }
+            } else  if (evaluator.didPlayerWin(player, dealer)) {
+                System.out.println(playerName + " is the winner! of this round.");
+                AllHandsAreDiscarded();
+                System.out.println("would you like to play another Round? 'yes' or 'no' ?");
+                String nextRound = userInput.nextLine();
+                if (playAnotherRound(nextRound)) {
+                    stillPlaying = true;
+                } else {
+                    System.out.println(playerName + ", goodbye for now.");
+                    stillPlaying = false;
+                }
+            } else {
+                System.out.println(dealer.getPlayerName() + " is the winner! of this round.");
+                AllHandsAreDiscarded();
+                System.out.println("would you like to play another Round? 'yes' or 'no' ?");
+                String nextRound = userInput.nextLine();
+                if (playAnotherRound(nextRound)) {
+                    stillPlaying = true;
+                } else {
+                    System.out.println(playerName + ", goodbye for now.");
+                    stillPlaying = false;
+                }
+            }
 
         }
 
-//        deck.printDeck();
-//        System.out.println("one card print test");
-//        System.out.println(deck.getDeckSize());
-//        deck.dealOneCardFromDeck();
     }
 
     /**
      * deals the first hand to each player and the dealer.
+     *
      * @param deckInPlay this is the deck currently being used to play a game.
      */
-    public boolean deal(@NotNull Deck deckInPlay) {
+    public void deal(@NotNull Deck deckInPlay) {
         if (deckInPlay.getDeckSize() <= 6) {
-            return false;
+            return;
         }
 
         player.getHand().addCardToHand(deckInPlay.dealOneCardFromDeck());
         dealer.getHand().addCardToHand(deckInPlay.dealOneCardFromDeck());
         player.getHand().addCardToHand(deckInPlay.dealOneCardFromDeck());
         dealer.getHand().addCardToHand(deckInPlay.dealOneCardFromDeck());
-        return true;
     }
 
     public Player evalFirstRoundPlayersHands() {
         Player winner = evaluator.isThereBlackJack(player, dealer);
-        if ( winner != null) {
+        if (winner != null) {
             return winner;
         }
         if (evaluator.isDealerUnableToHitAndPlayerWins(player, dealer)) {
@@ -81,44 +140,59 @@ public class GameRunner {
         return null;
     }
 
-    public void isNatural21(@NotNull Player player) {
-        if (player.getHand().valueOfCardsInHand() == 21 && player.getHand().getHandSize() == 2) {
-//            player.getHand().setWinningHand(true);
-            this.announceTheWinner(player);
+    /**
+     * This method allows the player to request another card or not.
+     *
+     * @param text = userInput; 'hit' or 'stand'
+     * @return a boolean; true = hit while false = stand. All other options = recursive call to same.
+     */
+    private boolean hitOrStand(String text) {
+        if (text.equalsIgnoreCase("hit") || text.equalsIgnoreCase("h")) {
+            System.out.println("TRUE! Player decided to hit");
+            return true;
+        } else if (text.equalsIgnoreCase("stand") || text.equalsIgnoreCase("s")) {
+            System.out.println("FALSE! Player is standing their ground");
+            return false;
+        } else {
+            System.out.println("Please try again. Do you want to \"Hit\" or \"Stand\"?");
+            Scanner userInput = new Scanner(System.in);
+            String text2 = userInput.nextLine();
+            return hitOrStand(text2);
         }
     }
-
-    public void hitOrStand(String text) {
-        return;
-    }
-
-//    public boolean bustOrNot (Player player) {
-//        int points = player.getHand().valueOfCardsInHand();
-//        if (points <= 21) {
-//                System.out.println(player.getPlayerName() + " " + points + " points");
-//        }
-//        return valGT21(player);
-//    }
-
-//    public boolean valGT21(@NotNull Player player) {
-//
-//        if(player.getHand().cardsInHand.contains(Card))
-//        return true;
-//    }
 
     /**
      * this method may be determined to be unnecessary. further work must be done.
      * however, will continue to play with sufficient cards for all players.
+     *
      * @return returns true when there still is a player left?
      */
-    public boolean continuePlay() {
-        return true;
+    private boolean playAnotherRound(String text) {
+        if (text.equalsIgnoreCase("yes") || text.equalsIgnoreCase("y")) {
+            System.out.println("TRUE! Player decided to play another hand");
+            return true;
+        } else if (text.equalsIgnoreCase("no") || text.equalsIgnoreCase("n")) {
+            System.out.println("FALSE! Player has quit.");
+            return false;
+        } else {
+            System.out.println("Please try again. Do you want to \"Hit\" or \"Stand\"?");
+            Scanner userInput = new Scanner(System.in);
+            String text2 = userInput.nextLine();
+            return playAnotherRound(text2);
+        }
     }
+
+    private void AllHandsAreDiscarded() {
+        player.getHand().discardAllCardsFromHand();
+        dealer.getHand().discardAllCardsFromHand();
+    }
+
+
 
     /**
      * call this method when a player wins.
      */
     public void announceTheWinner(@NotNull Player player) {
-        System.out.println(player.getPlayerName() +  " Wins!!");
+        System.out.println(player.getPlayerName() + " Wins!!");
     }
 }
