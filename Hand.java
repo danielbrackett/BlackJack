@@ -24,10 +24,6 @@ public class Hand {
         return value;
     }
 
-    public int getHandSize() {
-        return cardsInHand.size();
-    }
-
     @Override
     public String toString() {
         String retVal = "";
