@@ -30,19 +30,21 @@ public class RoundEvaluator {
         return player.getHand().valueOfCardsInHand() < 21;
     }
 
-    public boolean isThisRoundFinished() {
-        return true;
+    public boolean isBusted(Player player) {
+
+        return player.getHand().valueOfCardsInHand() > 21;
     }
 
-    public boolean isBusted(Player player) {
-        return player.getHand().valueOfCardsInHand() > 21;
+    public boolean mustDealerTakeACard(Player dealer, Player player) {
+       return dealer.getHand().valueOfCardsInHand() < 17
+               && !this.isBusted(player);
     }
 
     /**
      * helper when there's an ACE in the Hand.
      * work in progress.
      */
-    public boolean IsAceCausingThePlayerToBust(Player player) {
+    public int isThereAnAce(Player player) {
         int theValue = player.getHand().valueOfCardsInHand();
         while (theValue > 21) {
             for (Card card : player.getHand().cardsInHand) {
@@ -51,10 +53,11 @@ public class RoundEvaluator {
                 }
             }
         }
-        return false;
+        int i = player.getHand().valueOfCardsInHand() - theValue;
+        return i;
     }
 
     public boolean didPlayerWin(Player player, Player dealer) {
-        return player.getHand().valueOfCardsInHand() > dealer.getHand().valueOfCardsInHand() && !isBusted(player);
+        return (!this.isBusted(player) && player.getHand().valueOfCardsInHand() > dealer.getHand().valueOfCardsInHand());
     }
 }
