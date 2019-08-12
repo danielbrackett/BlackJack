@@ -58,6 +58,8 @@ public class RoundEvaluator {
     }
 
     public boolean didPlayerWin(Player player, Player dealer) {
-        return (!this.isBusted(player) && player.getHand().valueOfCardsInHand() > dealer.getHand().valueOfCardsInHand());
+        return (!this.isBusted(dealer) ||
+                (player.getHand().valueOfCardsInHand() >
+                        dealer.getHand().valueOfCardsInHand()));
     }
 }
