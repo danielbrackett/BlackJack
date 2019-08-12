@@ -1,6 +1,7 @@
 class Player {
 
     private Hand hand;
+
     private String playerName;
 
     public Player(String playerName) {
@@ -9,8 +10,9 @@ class Player {
         int bank = 100; //relates to the winnings. can they still play.
     }
 
-    public void printPlayerName() {
-        System.out.print(this.playerName);
+    @Override
+    public String toString() {
+        return "Player{" + "playerName='" + playerName + '\'' + '}';
     }
 
     public String getPlayerName() {
