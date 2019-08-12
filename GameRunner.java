@@ -1,7 +1,7 @@
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicBoolean;
+//import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameRunner {
 //may split this up this to make it a black jack runner and a general game runner.
@@ -30,7 +30,11 @@ public class GameRunner {
         Deck deck = new Deck(); //
         deck.shuffle();
 
-        while (stillPlaying) { //if either busts then play is over. if
+        /**
+         * if either busts then the round is over. while the player has more points than the dealer
+         * and the dealer has at least 17 then the round is over.
+         */
+        while (stillPlaying) {
             if (player.getHand().cardsInHand.isEmpty()) {
                 deal(deck);
                 System.out.println(getDealer().getPlayerName() + "'s cards: ");
@@ -44,38 +48,46 @@ public class GameRunner {
                 }
             }
 
-            AtomicBoolean anotherCard = new AtomicBoolean(evaluator.isPlayersHandLT21(player));
+            boolean anotherCard = evaluator.isPlayersHandLT21(player);
             System.out.println(anotherCard + " = another card");
 
-            if (anotherCard.get()) {
+            if (anotherCard) {
                 System.out.println(getPlayer().getPlayerName() + " will you hit or stand");
                 String decision = userInput.nextLine();
-                AtomicBoolean hit = new AtomicBoolean(hitOrStand(decision));
-                if (hit.get()) {
+                boolean hit = hitOrStand(decision);
+                if (hit) {
                     player.getHand().addCardToHand(deck.dealOneCardFromDeck());
                     System.out.println(getPlayer().getPlayerName() + "'s cards + one: ");
                     System.out.println(player.getHand());
                     if (evaluator.isBusted(player)) {
                         System.out.println("b+Busted !!");
-                        anotherCard.set(false); //IDE doesn't understand me.  this is very much used.
+                        anotherCard = false; //IDE doesn't understand me.  this is very much used.
                     }
                 } else {
                     System.out.println(getPlayer().getPlayerName() + "'s cards + None: ");
                     System.out.println(player.getHand());
                     if (evaluator.didPlayerWin(player, dealer)) {
-                        hit.set(false);
-                        anotherCard.set(false);
+                        hit = false;
+                        anotherCard = false;
                     }
                 }
             }
 
-            if (dealer.getHand().valueOfCardsInHand() < 17) {
+            /**
+             * if the dealer hasn't met the 17 threshold,
+             * return true
+             */
+            while (evaluator.mustDealerTakeACard(dealer, player)) {
                 dealer.getHand().addCardToHand(deck.dealOneCardFromDeck());
-
             }
 
+            /**
+             * did the player go bust?
+             */
             if (evaluator.isBusted(player)) {
-                System.out.println("oops that's a bust buster. lol");
+                System.out.println("oops that's a bust buster. lol. Better Luck next time " + player.getPlayerName());
+                System.out.println(getDealer().getPlayerName()+ " " + dealer.getHand());
+                System.out.println(player.getHand());
                 AllHandsAreDiscarded();
                 System.out.println("would you like to play another Round? 'yes' or 'no' ?");
                 String nextRound = userInput.nextLine();
@@ -85,8 +97,13 @@ public class GameRunner {
                     System.out.println(playerName + ", goodbye for now.");
                     stillPlaying = false;
                 }
+                /**
+                 * did the player win?
+                 */
             } else  if (evaluator.didPlayerWin(player, dealer)) {
                 System.out.println(playerName + " is the winner! of this round.");
+                System.out.println(dealer.getHand());
+                System.out.println(player.getHand());
                 AllHandsAreDiscarded();
                 System.out.println("would you like to play another Round? 'yes' or 'no' ?");
                 String nextRound = userInput.nextLine();
@@ -96,8 +113,13 @@ public class GameRunner {
                     System.out.println(playerName + ", goodbye for now.");
                     stillPlaying = false;
                 }
+                /**
+                 * the dealer won.
+                 */
             } else {
                 System.out.println(dealer.getPlayerName() + " is the winner! of this round.");
+                System.out.println(dealer.getHand());
+                System.out.println(player.getHand());
                 AllHandsAreDiscarded();
                 System.out.println("would you like to play another Round? 'yes' or 'no' ?");
                 String nextRound = userInput.nextLine();
