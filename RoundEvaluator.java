@@ -40,25 +40,8 @@ public class RoundEvaluator {
                && !this.isBusted(player);
     }
 
-    /**
-     * helper when there's an ACE in the Hand.
-     * work in progress.
-     */
-    public int isThereAnAce(Player player) {
-        int theValue = player.getHand().valueOfCardsInHand();
-        while (theValue > 21) {
-            for (Card card : player.getHand().cardsInHand) {
-                if (card.getCardValueEnum().equals(CardValueEnum.ACE)) {
-                    theValue -= 10;
-                }
-            }
-        }
-        int i = player.getHand().valueOfCardsInHand() - theValue;
-        return i;
-    }
-
     public boolean didPlayerWin(Player player, Player dealer) {
-        return (!this.isBusted(dealer) ||
+        return (!this.isBusted(dealer) &&
                 (player.getHand().valueOfCardsInHand() >
                         dealer.getHand().valueOfCardsInHand()));
     }
