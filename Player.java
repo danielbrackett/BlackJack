@@ -10,9 +10,8 @@ class Player {
         int bank = 100; //relates to the winnings. can they still play.
     }
 
-    @Override
-    public String toString() {
-        return "Player{" + "playerName='" + playerName + '\'' + '}';
+    public void printPlayerName() {
+        System.out.print(this.playerName);
     }
 
     public String getPlayerName() {
