@@ -48,6 +48,10 @@ public class GameRunner {
                 }
             }
 
+            /**
+             * logic to deal more cards to the player upon request. otherwise not. including logic to
+             * stop dealing if the player busts(point value is over 21).
+             */
             boolean anotherCard = evaluator.isPlayersHandLT21(player);
             System.out.println(anotherCard + " = another card");
 
@@ -77,7 +81,7 @@ public class GameRunner {
              * if the dealer hasn't met the 17 threshold,
              * return true
              */
-            while (evaluator.mustDealerTakeACard(dealer, player)) {
+            while (!evaluator.isBusted(player) && evaluator.mustDealerTakeACard(dealer, player)) {
                 dealer.getHand().addCardToHand(deck.dealOneCardFromDeck());
             }
 
