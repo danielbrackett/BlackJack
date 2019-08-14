@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.spi.CalendarDataProvider;
 
 public class Hand {
 
@@ -19,9 +18,10 @@ public class Hand {
 
     /**
      * this valueOfCardsInHand is simple and known to work but does't account for the cae card and it's dual nature.
-     * added a new experimental valueOfCardsInHand2() to take into account when 1 or more ACE card forces the
+     * added a new valueOfCardsInHand2() to take into account when 1 or more ACE card forces the
      * value of the cardsInHand over 21.
-     * @return
+     *
+     * @return the value of the cards in a given players Hand Obj.
      */
     public int valueOfCardsInHand() {
         int value = 0;
@@ -35,8 +35,8 @@ public class Hand {
     }
 
     /**
-     * This valueOfCardsInHand2 is experimental . caution when using it.
-     * @return
+     * This valueOfCardsInHand2 is to account for the sometimes low value of teh ACE card.
+     * @return this will return the value of a Hand Obj. playing at least one ACE as low.
      */
     public int valueOfCardsInHand2(int originalValue) {
         int value = 0;
@@ -49,7 +49,7 @@ public class Hand {
                     value += card.getCardValueEnum().getCardPoints();
                 }
             }
-        } while (originalValue > 21) ;
+        } while (originalValue > 21);
         return value;
     }
 
