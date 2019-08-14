@@ -88,46 +88,19 @@ public class GameRunner {
             System.out.println("begining the eval logic flow.");
             if (evaluator.isBusted(player)) {
                 System.out.println("oops that's a bust buster. lol. Better Luck next time " + player.getPlayerName());
-                System.out.println(getDealer().getPlayerName() + " " + dealer.getHand());
-                System.out.println(getPlayer().getPlayerName() + " " + player.getHand());
-                AllHandsAreDiscarded();
-                System.out.println("Would you like to play another Round? 'yes' or 'no' ?");
-                String nextRound = userInput.nextLine();
-                if (playAnotherRound(nextRound)) stillPlaying = true;
-                else {
-                    System.out.println(playerName + ", goodbye for now.");
-                    stillPlaying = false;
-                }
+                askPlayerAnotherRoundDialogue(userInput);
                 /*
                  * did the player win?
                  */
             } else if (evaluator.didPlayerWin(player, dealer)) {
                 System.out.println(playerName + " is the winner! of this round.");
-                System.out.println(dealer.getHand());
-                System.out.println(player.getHand());
-                AllHandsAreDiscarded();
-                System.out.println("Would you like to play another Round? 'yes' or 'no' ?");
-                String nextRound = userInput.nextLine();
-                if (playAnotherRound(nextRound)) stillPlaying = true;
-                else {
-                    System.out.println(playerName + ", goodbye for now.");
-                    stillPlaying = false;
-                }
+                askPlayerAnotherRoundDialogue(userInput);
                 /*
                  * the dealer won.
                  */
             } else {
                 System.out.println(dealer.getPlayerName() + " is the winner! of this round.");
-                System.out.println(dealer.getHand());
-                System.out.println(player.getHand());
-                AllHandsAreDiscarded();
-                System.out.println("Would you like to play another Round? 'yes' or 'no' ?");
-                String nextRound = userInput.nextLine();
-                if (playAnotherRound(nextRound)) stillPlaying = true;
-                else {
-                    System.out.println(playerName + ", goodbye for now.");
-                    stillPlaying = false;
-                }
+                askPlayerAnotherRoundDialogue(userInput);
             }
 
         }
@@ -197,16 +170,16 @@ public class GameRunner {
         }
     }
 
-    private boolean askPlayerAnotherRoundDialogue(Scanner userInput) {
+    private void askPlayerAnotherRoundDialogue(Scanner userInput) {
         System.out.println(getDealer().getPlayerName() + " " + dealer.getHand());
         System.out.println(getPlayer().getPlayerName() + " " + player.getHand());
         AllHandsAreDiscarded();
         System.out.println("Would you like to play another Round? 'yes' or 'no' ?");
         String nextRound = userInput.nextLine();
-        if (playAnotherRound(nextRound))  return stillPlaying = true;
+        if (playAnotherRound(nextRound))  stillPlaying = true;
         else {
             System.out.println(getPlayer().getPlayerName() + ", goodbye for now.");
-            return stillPlaying = false;
+            stillPlaying = false;
         }
     }
 
