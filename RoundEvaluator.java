@@ -36,8 +36,8 @@ public class RoundEvaluator {
     }
 
     public boolean mustDealerTakeACard(Player dealer, Player player) {
-       return dealer.getHand().valueOfCardsInHand() < 17
-               && !this.isBusted(player);
+        return dealer.getHand().valueOfCardsInHand() < 17
+                && !this.isBusted(player);
     }
 
     public boolean didPlayerWin(Player player, Player dealer) {
