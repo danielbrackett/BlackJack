@@ -3,8 +3,18 @@ import java.util.Collections;
 import java.util.Random;
 
 class Deck {
+    //add a discard pile. so that if it is necessary to add the discard pile to the remaining cards in the deck and
+    // then shuffle the hybrid deck and then deal as necessary to
+    // finish a round.
 
     private final ArrayList<Card> deck = new ArrayList<>(52);
+    private final ArrayList<Card> discardPile = new ArrayList<>();
+    //refactor to a Queue. Problem; Cannot easily
+//    shuffle a queue. Options keep as ArrayList<Card>, switch to a LinkedList<Card> to take advantage of poll(),
+//    peek() and offer() methods, switch to a Queue but to shuffle the 'Deck' obj. 1. convert to an Obj[] 2.
+//    shuffle, 3. foreach or ?Iterator? it back into a queue. Why switch to a Queue? to deny malicious access to
+//    the deck, make it harder to cheat.
+//    private final List<Card> deck = new LinkedList<Card>;
 
     public Deck() {
         this.createDeck();
@@ -59,6 +69,10 @@ class Deck {
         return deck.size();
     }
 
+    public ArrayList<Card> getDiscardPile() {
+        return discardPile;
+    }
+
     /**
      * Prints all the cards in the deck to the terminal.
      */
@@ -68,4 +82,8 @@ class Deck {
         }
     }
 
+
+    public void moveCardsToDisCardPile(ArrayList<Card> cardsInHand) {
+        discardPile.addAll(cardsInHand);
+    }
 }
