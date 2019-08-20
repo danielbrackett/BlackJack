@@ -1,7 +1,6 @@
 class Player {
 
     private Hand hand;
-
     private String playerName;
 
     public Player(String playerName) {
@@ -18,7 +17,7 @@ class Player {
         return this.playerName;
     }
 
-    public void setPlayerName(String playerName) {
+    public void setPlayerName(final String playerName) {
         this.playerName = playerName;
     }
 
