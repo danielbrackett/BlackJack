@@ -12,7 +12,7 @@ public class Card {
      * @param cardValue this is the value for each card for the game of BlackJack.
      */
     @Contract(pure = true)
-    public Card(Suit suit, CardValueEnum cardValue) {
+    public Card(final Suit suit, final CardValueEnum cardValue) {
         this.suit = suit; //
         this.cardValue = cardValue;
     }
