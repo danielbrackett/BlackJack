@@ -27,14 +27,14 @@ class Deck {
     private void createDeck() {
         for (Suit suitName : Suit.values()) {
             for (int i = 0; i <= 12; i++) {
-                Card c = new Card(suitName, CardValueEnum.values()[i]);
+                final Card c = new Card(suitName, CardValueEnum.values()[i]);
                 deck.add(c);
             }
         }
     }
 
     /**
-     * self built shuffle method.
+     * home brewed shuffle method.
      */
     public void shuffle() {
         Random rand = new Random();
@@ -83,7 +83,7 @@ class Deck {
     }
 
 
-    public void moveCardsToDisCardPile(ArrayList<Card> cardsInHand) {
+    public void moveCardsToDiscardPile(ArrayList<Card> cardsInHand) {
         discardPile.addAll(cardsInHand);
     }
 }
