@@ -1,3 +1,5 @@
+import java.util.Arrays;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -7,14 +9,8 @@ class Deck {
     // then shuffle the hybrid deck and then deal as necessary to
     // finish a round.
 
-    private final ArrayList<Card> deck = new ArrayList<>(52);
+    private final ArrayDeque<Card> deck = new ArrayDeque<>(52);
     private final ArrayList<Card> discardPile = new ArrayList<>();
-    //refactor to a Queue. Problem; Cannot easily
-//    shuffle a queue. Options keep as ArrayList<Card>, switch to a LinkedList<Card> to take advantage of poll(),
-//    peek() and offer() methods, switch to a Queue but to shuffle the 'Deck' obj. 1. convert to an Obj[] 2.
-//    shuffle, 3. foreach or ?Iterator? it back into a queue. Why switch to a Queue? to deny malicious access to
-//    the deck, make it harder to cheat.
-//    private final List<Card> deck = new LinkedList<Card>;
 
     public Deck() {
         this.createDeck();
@@ -34,30 +30,54 @@ class Deck {
     }
 
     /**
-     * home brewed shuffle method.
+     * home brewed shuffle method. dump the ArrayDeque<Card> -> Card[] -> ArrayList<Card> 
+     * then shuffle, then return
+     * the ArrayDeque. 
      */
     public void shuffle() {
+        ArrayList<Card> deckAL = new ArrayList<>(Arrays.asList(deck.toArray(new Card[51])));
         Random rand = new Random();
-        for (int i = 0; i < deck.size(); i++) {
-            Card currentCard = deck.get(i);
-            int value = rand.nextInt(86317389);
-            int swapIndex = value % this.getDeckSize();
-            Card temp = deck.get(swapIndex);
-            deck.set(swapIndex, currentCard);
-            deck.set(i, temp);
+        for (int i = 0; i < deckAL.size(); i++) {
+            Card currentCard = deckAL.get(0);
+            int value = rand.nextInt();
+            int swapIndex = value % deckAL.size();
+            Card temp = deckAL.get(swapIndex);
+            deckAL.set(swapIndex, currentCard);
+            deckAL.set(i, temp);
         }
+    }
+
+    /**
+     * home brewed shuffle method. dump the ArrayDeque<Card> -> Card[]
+     * then shuffle, then return
+     * the ArrayDeque.
+     */
+    public void shuffle2() {
+        Card[] deckToShuffle = deck.toArray(new Card[51]);
+        Random rand = new Random();
+        for (int i = 0; i < deckToShuffle.length; i++) {
+            Card currentCard = deckToShuffle[i];
+            int value = rand.nextInt();
+            int swapIndex = value % deckToShuffle.length;
+            Card temp = deckToShuffle[swapIndex];
+            deckToShuffle[swapIndex] = currentCard;
+            deckToShuffle[i] = temp;
+        }
+        deck.clear(); //clears the ArrayDeque of all cards before putting the cards
+        // back into the ArrayDeque from the Card[]
+        deck.addAll(Arrays.asList(deckToShuffle));// sweet!!
     }
 
     /**
      * taking advantage of the Collections.shuffle() Thanks Java!
      */
     public void easyShuffle() {
-        Collections.shuffle(deck);
+        ArrayList<Card> deckAL = new ArrayList<Card>(Arrays.asList(deck.toArray(new Card[51])));
+        Collections.shuffle(deckAL);
     }
 
     public Card dealOneCardFromDeck() {
-        Card cardDealt = deck.get(0);
-        deck.remove(0);
+        Card cardDealt = deck.poll();
 //        System.out.println(cardDealt + " which was just dealt.");
         return cardDealt;
     }
