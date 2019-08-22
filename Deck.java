@@ -36,15 +36,19 @@ class Deck {
      */
     public void shuffle() {
         ArrayList<Card> deckAL = new ArrayList<>(Arrays.asList(deck.toArray(new Card[51])));
+//        System.out.println(deckAL.size());
         Random rand = new Random();
         for (int i = 0; i < deckAL.size(); i++) {
-            Card currentCard = deckAL.get(0);
-            int value = rand.nextInt();
-            int swapIndex = value % deckAL.size();
+            Card currentCard = deckAL.get(i);
+            int value = rand.nextInt(86317389);
+            int swapIndex = value % getDeckSize();
+            System.out.println(i + ", " +swapIndex);
             Card temp = deckAL.get(swapIndex);
             deckAL.set(swapIndex, currentCard);
             deckAL.set(i, temp);
         }
+        deck.clear();
+        deck.addAll(deckAL);
     }
 
     /**
@@ -74,6 +78,8 @@ class Deck {
     public void easyShuffle() {
         ArrayList<Card> deckAL = new ArrayList<Card>(Arrays.asList(deck.toArray(new Card[51])));
         Collections.shuffle(deckAL);
+        deck.clear();
+        deck.addAll(deckAL);
     }
 
     public Card dealOneCardFromDeck() {
