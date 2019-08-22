@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Hand {
 
-    public final ArrayList<Card> cardsInHand;
+    private final ArrayList<Card> cardsInHand;
 
     public Hand() {
         cardsInHand = new ArrayList<>(); //cards dealt to a player not to exceed 21.
@@ -14,6 +14,14 @@ public class Hand {
 
     public void discardAllCardsFromHand() {
         this.cardsInHand.clear();
+    }
+
+//    public void putInDiscardPile(Deck deck) {
+//        deck.moveCardsToDisCardPile(cardsInHand);
+//    }
+
+    public ArrayList<Card> getCardsInHand() {
+        return cardsInHand;
     }
 
     /**
@@ -28,28 +36,40 @@ public class Hand {
         for (Card card : this.cardsInHand) {
             value += card.getCardValueEnum().getCardPoints();
         }
-        if (value > 21) {
-            value = valueOfCardsInHand2(value);
+        if (value <= 21) {
+            return value;
         }
+        int numberOfAces = 0;
+        for (Card card : this.cardsInHand) {
+            if (card.getCardValueEnum() == CardValueEnum.ACE) {
+                numberOfAces += 1;
+            }
+        }
+        int numberOfSubtractableAces = numberOfAces;
+        while (value > 21 && numberOfSubtractableAces > 0) {
+            value -= 10;
+            numberOfSubtractableAces -= 1;
+        }
+//        if (value > 21) {
+//            value = valueOfCardsInHand2(value);
+//        }
         return value;
     }
 
     /**
      * This valueOfCardsInHand2 is to account for the sometimes low value of teh ACE card.
+     *
      * @return this will return the value of a Hand Obj. playing at least one ACE as low.
      */
     public int valueOfCardsInHand2(int originalValue) {
-        int value = 0;
-        do {
+        int value = originalValue;
+        while (value > 21) {
             for (Card card : this.cardsInHand) {
-                if (card.getCardValueEnum().getCardPoints() == 11) {
-                    value += card.getCardValueEnum().getCardPoints() - 10;
-                    originalValue -= 10;
-                } else {
-                    value += card.getCardValueEnum().getCardPoints();
+                if (card.getCardValueEnum() == CardValueEnum.ACE) {
+                    value -= 10;
                 }
             }
-        } while (originalValue > 21);
+        }
         return value;
     }
 
