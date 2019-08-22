@@ -31,7 +31,6 @@ public class RoundEvaluator {
     }
 
     public boolean isBusted(Player player) {
-
         return player.getHand().valueOfCardsInHand() > 21;
     }
 
@@ -41,8 +40,23 @@ public class RoundEvaluator {
     }
 
     public boolean didPlayerWin(Player player, Player dealer) {
-        return (!this.isBusted(dealer) &&
-                (player.getHand().valueOfCardsInHand() >
-                        dealer.getHand().valueOfCardsInHand()));
+        final boolean playerScoreHigher = player.getHand().valueOfCardsInHand() >
+                dealer.getHand().valueOfCardsInHand();
+        final boolean dealerBust = this.isBusted(dealer);
+        final boolean playerBust = this.isBusted(player);
+        return !playerBust && (dealerBust || playerScoreHigher);
+    }
+
+    public boolean didDealerWin(Player player, Player dealer) {
+        final boolean dealerScoreHigher = dealer.getHand().valueOfCardsInHand() >
+                player.getHand().valueOfCardsInHand();
+        final boolean dealerBust = this.isBusted(dealer);
+        final boolean playerBust = this.isBusted(player);
+        return !dealerBust && (playerBust || dealerScoreHigher);
+    }
+
+    public  boolean didNoOneWin(Player player, Player dealer) {
+        return dealer.getHand().valueOfCardsInHand() ==
+                player.getHand().valueOfCardsInHand();
     }
 }
