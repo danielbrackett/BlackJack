@@ -36,13 +36,11 @@ class Deck {
      */
     public void shuffle() {
         ArrayList<Card> deckAL = new ArrayList<>(Arrays.asList(deck.toArray(new Card[51])));
-//        System.out.println(deckAL.size());
         Random rand = new Random();
         for (int i = 0; i < deckAL.size(); i++) {
             Card currentCard = deckAL.get(i);
             int value = rand.nextInt(86317389);
             int swapIndex = value % getDeckSize();
-            System.out.println(i + ", " +swapIndex);
             Card temp = deckAL.get(swapIndex);
             deckAL.set(swapIndex, currentCard);
             deckAL.set(i, temp);
@@ -67,8 +65,7 @@ class Deck {
             deckToShuffle[swapIndex] = currentCard;
             deckToShuffle[i] = temp;
         }
-        deck.clear(); //clears the ArrayDeque of all cards before putting the cards
-        // back into the ArrayDeque from the Card[]
+        deck.clear();
         deck.addAll(Arrays.asList(deckToShuffle));// sweet!!
     }
 
@@ -84,7 +81,6 @@ class Deck {
 
     public Card dealOneCardFromDeck() {
         Card cardDealt = deck.poll();
-//        System.out.println(cardDealt + " which was just dealt.");
         return cardDealt;
     }
 
