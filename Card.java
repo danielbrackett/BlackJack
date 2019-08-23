@@ -17,7 +17,7 @@ public class Card {
         this.cardValue = cardValue;
     }
 
-    public Suit getSuit() {
+    private Suit getSuit() {
         return suit;
     }
 
