@@ -16,9 +16,9 @@ public class Hand {
         this.cardsInHand.clear();
     }
 
-//    public void putInDiscardPile(Deck deck) {
-//        deck.moveCardsToDisCardPile(cardsInHand);
-//    }
+    public void putInDiscardPile(Deck deck) {
+        deck.discardPile.addAll(cardsInHand);
+    }
 
     public ArrayList<Card> getCardsInHand() {
         return cardsInHand;
@@ -50,39 +50,19 @@ public class Hand {
             value -= 10;
             numberOfSubtractableAces -= 1;
         }
-//        if (value > 21) {
-//            value = valueOfCardsInHand2(value);
-//        }
-        return value;
-    }
-
-    /**
-     * This valueOfCardsInHand2 is to account for the sometimes low value of teh ACE card.
-     *
-     * @return this will return the value of a Hand Obj. playing at least one ACE as low.
-     */
-    public int valueOfCardsInHand2(int originalValue) {
-        int value = originalValue;
-        while (value > 21) {
-            for (Card card : this.cardsInHand) {
-                if (card.getCardValueEnum() == CardValueEnum.ACE) {
-                    value -= 10;
-                }
-            }
-        }
         return value;
     }
 
     @Override
     public String toString() {
-        String retVal = "";
+        StringBuilder retVal = new StringBuilder();
         for (Card card : cardsInHand) {
-            retVal += card.toString();
+            retVal.append(card.toString());
             if (cardsInHand.indexOf(card) != cardsInHand.size()) {
-                retVal += ", ";
+                retVal.append(", ");
             }
         }
-        retVal += ". Total value: " + valueOfCardsInHand();
-        return retVal;
+        retVal.append(". Total value: ").append(valueOfCardsInHand());
+        return retVal.toString();
     }
 }
