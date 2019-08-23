@@ -6,11 +6,7 @@ class Player {
     public Player(String playerName) {
         this.playerName = playerName;
         setHand(new Hand());
-        int bank = 100; //relates to the winnings. can they still play.
-    }
-
-    public void printPlayerName() {
-        System.out.print(this.playerName);
+//        int bank = 100; relates to the winnings. can they still play.
     }
 
     public String getPlayerName() {
