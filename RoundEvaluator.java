@@ -1,6 +1,8 @@
 public class RoundEvaluator {
 
     /**
+     * Java Default constructor is used.
+     *
      * does the dealer have a 21 ?
      * did a player get 21?
      * is the round over? all players stayed and the dealer has over 17
