@@ -10,7 +10,7 @@ class Deck {
     // finish a round.
 
     private final ArrayDeque<Card> deck = new ArrayDeque<>(52);
-    private final ArrayList<Card> discardPile = new ArrayList<>();
+    final ArrayList<Card> discardPile = new ArrayList<>();
 
     public Deck() {
         this.createDeck();
@@ -73,23 +73,30 @@ class Deck {
      * taking advantage of the Collections.shuffle() Thanks Java!
      */
     public void easyShuffle() {
-        ArrayList<Card> deckAL = new ArrayList<Card>(Arrays.asList(deck.toArray(new Card[51])));
+        ArrayList<Card> deckAL = new ArrayList<>(Arrays.asList(deck.toArray(new Card[51])));
         Collections.shuffle(deckAL);
         deck.clear();
         deck.addAll(deckAL);
     }
 
     public Card dealOneCardFromDeck() {
-        Card cardDealt = deck.poll();
-        return cardDealt;
+        return deck.poll();
     }
 
     /**
      * @return the total number of cards remaining in the deck in play.
      */
-    public int getDeckSize() {
+    private int getDeckSize() {
         return deck.size();
     }
+
+    /**
+     * @return the total number of cards remaining in the deck in play.
+     */
+    public int getDiscardPileSize() {
+        return discardPile.size();
+    }
+
 
     public ArrayList<Card> getDiscardPile() {
         return discardPile;
@@ -103,7 +110,6 @@ class Deck {
             System.out.println(card);
         }
     }
-
 
     public void moveCardsToDiscardPile(ArrayList<Card> cardsInHand) {
         discardPile.addAll(cardsInHand);
