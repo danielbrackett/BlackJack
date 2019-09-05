@@ -58,7 +58,7 @@ public class Hand {
         StringBuilder retVal = new StringBuilder();
         for (Card card : cardsInHand) {
             retVal.append(card.toString());
-            if (cardsInHand.indexOf(card) != cardsInHand.size()) {
+            if (cardsInHand.indexOf(card) != (cardsInHand.size() - 1)) {
                 retVal.append(", ");
             }
         }
