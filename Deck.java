@@ -1,8 +1,4 @@
-import java.util.Arrays;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 class Deck {
     //add a discard pile. so that if it is necessary to add the discard pile to the remaining cards in the deck and
@@ -113,5 +109,10 @@ class Deck {
 
     public void moveCardsToDiscardPile(ArrayList<Card> cardsInHand) {
         discardPile.addAll(cardsInHand);
+    }
+
+    public void addDiscardPileBackToDeck() {
+            deck.addAll(discardPile);
+            this.easyShuffle();
     }
 }
