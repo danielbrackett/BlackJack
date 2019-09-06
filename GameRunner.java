@@ -1,34 +1,26 @@
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Scanner;
 
-public class GameRunner {
+class GameRunner {
 //may split this up this to make it a black jack runner and a general game runner.
-
 
     private final Player dealer = new Player("Dealer");
     private final Player player = new Player("");
-    private RoundEvaluator evaluator = new RoundEvaluator();
+    private final RoundEvaluator evaluator = new RoundEvaluator();
     private boolean stillPlaying = true;
 
-    public Player getDealer() {
-        return dealer;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void run() {
+    void run() {
         Scanner userInput = new Scanner(System.in);
         System.out.println("What is your name?");
         String nameInput = userInput.nextLine();
-        getPlayer().setPlayerName(nameInput);
+        player.setPlayerName(nameInput);
         System.out.println("Let's play some BlackJack, " + nameInput + ".");
 
-        Deck deck = new Deck(); //
+        Deck deck = new Deck();
         deck.shuffle();
-        deck.printDeck();
+//        deck.printDeck();
 
         /*
          * if either busts then the round is over. while the player has more points than the dealer
@@ -37,17 +29,19 @@ public class GameRunner {
         while (stillPlaying) {
             if (player.getHand().getCardsInHand().isEmpty()) {
                 deal(deck);
-                System.out.println(getDealer().getPlayerName() + "'s cards: ");
-                System.out.println(dealer.getHand().getCardsInHand().get(0));
-                System.out.println(getPlayer().getPlayerName() + "'s cards: ");
-                System.out.println(player.getHand());
+                System.out.println(dealer.getPlayerName() + "'s cards: " + dealer.getHand().getCardsInHand().get(0));
+//                System.out.println();
+                System.out.println(player.getPlayerName() + "'s cards: " + player.getHand());
+//                System.out.println();
                 Player winner = evalFirstRoundPlayersHands();
                 if (winner != null) {
                     allHandsAreDiscarded(deck);
                     System.out.println(winner.getPlayerName() + " winner winner chicken dinner!");
+                    askPlayerAnotherRoundDialogue(userInput);
                     continue;
                 }
             }
+
 
             // logic to deal more cards to the player upon request. otherwise not. including logic to
             // stop dealing if the player busts(point value is over 21).
@@ -57,16 +51,17 @@ public class GameRunner {
             while (canStillHit) {
                 boolean hit = hitOrStand(userInput);
                 if (hit) {
+                    timeToRefreshTheDeck(deck);
                     player.getHand().addCardToHand(deck.dealOneCardFromDeck());
-                    System.out.println(getPlayer().getPlayerName() + "'s cards + one: ");
-                    System.out.println(player.getHand());
+                    canStillHit = evaluator.isPlayersHandLT21(player);
+                    System.out.println(player.getPlayerName() + "'s cards + one: " + player.getHand());
                     if (evaluator.isBusted(player)) {
                         System.out.println("Busted !!");
-                        canStillHit = false;
+//                        canStillHit = false;
                     }
                 } else {
-                    System.out.println(getPlayer().getPlayerName() + "'s cards + None: ");
-                    System.out.println(player.getHand());
+//                    System.out.println(player.getPlayerName() + "'s cards + None: " + player.getHand());
+//                    System.out.println(player.getHand());
                     canStillHit = false;
                 }
             }
@@ -85,7 +80,7 @@ public class GameRunner {
             /*
              * did the player go bust?
              */
-            System.out.println("beginning the eval logic flow.");
+//            System.out.println("beginning the eval logic flow.");
             if (evaluator.isBusted(player)) {
                 System.out.println("oops that's a bust buster. lol. Better Luck next time " + player.getPlayerName());
                 printAllHands();
@@ -108,24 +103,19 @@ public class GameRunner {
                 allHandsAreDiscarded(deck);
                 askPlayerAnotherRoundDialogue(userInput);
                 /*
-                 * the dealer and the player have the same score the result is a push all parties get there bets back
+                 * the dealer and the player have the same score the result is a push all parties get their bets back
                  *  no one wins.
                  */
-            } else  if (evaluator.didNoOneWin(player, dealer)){
+            } else if (evaluator.didNoOneWin(player, dealer)) {
                 printAllHands();
                 System.out.println("No one is the winner! of this round. Please enjoy this round for free.");
                 allHandsAreDiscarded(deck);
                 askPlayerAnotherRoundDialogue(userInput);
             }
+            timeToRefreshTheDeck(deck);
         }
 //  Note; END OF run()
     }
-
-
-//
-//    public boolean canDeal(@NotNull Deck deckInPlay) {
-//        return (deckInPlay.getDeckSize() > 6);
-//    }
 
     /**
      * deals the first hand to each player and the dealer.
@@ -139,6 +129,7 @@ public class GameRunner {
         dealer.getHand().addCardToHand(deckInPlay.dealOneCardFromDeck());
     }
 
+    @Nullable
     private Player evalFirstRoundPlayersHands() {
         Player winner = evaluator.isThereBlackJack(player, dealer);
         if (winner != null) return winner;
@@ -153,7 +144,7 @@ public class GameRunner {
      * @return a boolean; true = hit while false = stand. All other options = recursive call to same.
      */
     private boolean hitOrStand(Scanner userInput) {
-        System.out.println(getPlayer().getPlayerName() + " will you hit or stand");
+        System.out.println(player.getPlayerName() + " will you hit or stand");
         String text = userInput.nextLine();
         if (text.equalsIgnoreCase("hit") || text.equalsIgnoreCase("h")) {
 //            System.out.println("TRUE! Player decided to hit");
@@ -189,14 +180,14 @@ public class GameRunner {
     }
 
     private void printAllHands() {
-        System.out.println(getDealer().getPlayerName() + " " + dealer.getHand());
-        System.out.println(getPlayer().getPlayerName() + " " + player.getHand());
+        System.out.println(dealer.getPlayerName() + " " + dealer.getHand());
+        System.out.println(player.getPlayerName() + " " + player.getHand());
     }
 
     private void askPlayerAnotherRoundDialogue(Scanner userInput) {
         if (playAnotherRound(userInput)) stillPlaying = true;
         else {
-            System.out.println(getPlayer().getPlayerName() + ", goodbye for now.");
+            System.out.println(player.getPlayerName() + ", goodbye for now.");
             stillPlaying = false;
         }
     }
@@ -206,13 +197,12 @@ public class GameRunner {
         deck.moveCardsToDiscardPile(dealer.getHand().getCardsInHand());
         player.getHand().discardAllCardsFromHand();
         dealer.getHand().discardAllCardsFromHand();
+        System.out.println(deck.getDiscardPileSize());
     }
 
-
-//    /**
-//     * call this method when a player wins.
-//     */
-//    public void announceTheWinner(@NotNull Player player) {
-//        System.out.println(player.getPlayerName() + " Wins!!");
-//    }
+    private void timeToRefreshTheDeck(Deck deck) {
+        if (deck.getDeckSize() < 10) {
+            deck.addDiscardPileBackToDeck();
+        }
+    }
 }
