@@ -82,7 +82,7 @@ class Deck {
     /**
      * @return the total number of cards remaining in the deck in play.
      */
-    private int getDeckSize() {
+    public int getDeckSize() {
         return deck.size();
     }
 
@@ -107,12 +107,14 @@ class Deck {
         }
     }
 
-    public void moveCardsToDiscardPile(ArrayList<Card> cardsInHand) {
+    void moveCardsToDiscardPile(ArrayList<Card> cardsInHand) {
         discardPile.addAll(cardsInHand);
     }
 
-    public void addDiscardPileBackToDeck() {
+    void addDiscardPileBackToDeck() {
             deck.addAll(discardPile);
-            this.easyShuffle();
+            discardPile.clear();
+            this.shuffle();
+
     }
 }
