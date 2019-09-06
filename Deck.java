@@ -5,8 +5,8 @@ class Deck {
     // then shuffle the hybrid deck and then deal as necessary to
     // finish a round.
 
-    private final ArrayDeque<Card> deck = new ArrayDeque<>(52);
     final ArrayList<Card> discardPile = new ArrayList<>();
+    private final ArrayDeque<Card> deck = new ArrayDeque<>(52);
 
     public Deck() {
         this.createDeck();
@@ -26,9 +26,9 @@ class Deck {
     }
 
     /**
-     * home brewed shuffle method. dump the ArrayDeque<Card> -> Card[] -> ArrayList<Card> 
+     * home brewed shuffle method. dump the ArrayDeque<Card> -> Card[] -> ArrayList<Card>
      * then shuffle, then return
-     * the ArrayDeque. 
+     * the ArrayDeque.
      */
     public void shuffle() {
         ArrayList<Card> deckAL = new ArrayList<>(Arrays.asList(deck.toArray(new Card[51])));
@@ -112,9 +112,8 @@ class Deck {
     }
 
     void addDiscardPileBackToDeck() {
-            deck.addAll(discardPile);
-            discardPile.clear();
-            this.shuffle();
-
+        deck.addAll(discardPile);
+        discardPile.clear();
+        this.shuffle();
     }
 }

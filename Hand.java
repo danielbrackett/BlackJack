@@ -5,7 +5,7 @@ public class Hand {
     private final ArrayList<Card> cardsInHand;
 
     public Hand() {
-        cardsInHand = new ArrayList<>(); //cards dealt to a player not to exceed 21.
+        cardsInHand = new ArrayList<>();
     }
 
     public void addCardToHand(Card card) {
@@ -25,9 +25,7 @@ public class Hand {
     }
 
     /**
-     * this valueOfCardsInHand is simple and known to work but does't account for the cae card and it's dual nature.
-     * added a new valueOfCardsInHand2() to take into account when 1 or more ACE card forces the
-     * value of the cardsInHand over 21.
+     * this valueOfCardsInHand is simple and known to work. It accounts for the dual nature of the ACE card.
      *
      * @return the value of the cards in a given players Hand Obj.
      */

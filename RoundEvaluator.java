@@ -2,12 +2,6 @@ public class RoundEvaluator {
 
     /**
      * Java Default constructor is used.
-     *
-     * does the dealer have a 21 ?
-     * did a player get 21?
-     * is the round over? all players stayed and the dealer has over 17
-     * did any player have a 2 cards of the same value? in the first deal. # add-on.
-     * evaluate outcome of round.
      */
 
     public Player isThereBlackJack(Player player, Player dealer) {
@@ -57,7 +51,7 @@ public class RoundEvaluator {
         return !dealerBust && (playerBust || dealerScoreHigher);
     }
 
-    public  boolean didNoOneWin(Player player, Player dealer) {
+    public boolean didNoOneWin(Player player, Player dealer) {
         return dealer.getHand().valueOfCardsInHand() ==
                 player.getHand().valueOfCardsInHand();
     }
