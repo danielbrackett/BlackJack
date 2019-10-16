@@ -63,4 +63,8 @@ public class Hand {
         retVal.append(". Total value: ").append(valueOfCardsInHand());
         return retVal.toString();
     }
+
+    boolean isHandEmpty() {
+        return cardsInHand.isEmpty();
+    }
 }

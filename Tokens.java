@@ -1,18 +1,15 @@
-public class Bank {
+public class Tokens {
 
     int total;
-    int initialTotal = 0;
 
     public int getTotal() {
         return total;
     }
 
-    public int calculateWinnings() {
-        return getTotal() - initialTotal;
-    }
-
-    public void addMoneyToBank(int money) {
-        total += money;
-    }
+//    public void addWinningsToTokens(int winnings) {
+//        total += winnings;
+//    }
+//
+//    public void subtractLossesFromTokens(int losses) { total += losses; }
 
 }
