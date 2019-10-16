@@ -7,6 +7,7 @@ class GameRunner {
 
     private final Player dealer = new Player("Dealer");
     private final Player player = new Player("");
+    private final Bet bet = new Bet();
     private final RoundEvaluator evaluator = new RoundEvaluator();
     private boolean stillPlaying = true;
 
@@ -16,6 +17,7 @@ class GameRunner {
         String nameInput = userInput.nextLine();
         player.setPlayerName(nameInput);
         System.out.println("Let's play some BlackJack, " + nameInput + ".");
+        System.out.println("The Stakes at this table are 5 tokens a hand.");
 
         Deck deck = new Deck();
         deck.shuffle();
@@ -24,8 +26,11 @@ class GameRunner {
          * if either busts then the round is over. while the player has more points than the dealer
          * and the dealer has at least 17 then the round is over.
          */
-        while (stillPlaying) {
+        while (stillPlaying && player.getTokens().getTotal() > 0) {
             if (player.getHand().getCardsInHand().isEmpty()) {
+                if (player.isHandEnmpty() && bet.getPot() == 0) {
+                    bet.addToPot(player.placeBet(bet.getBetAmount()));
+                }
                 deal(deck);
                 System.out.println(dealer.getPlayerName() + "'s cards: " + dealer.getHand().getCardsInHand().get(0));
                 System.out.println(player.getPlayerName() + "'s cards: " + player.getHand());
@@ -37,7 +42,6 @@ class GameRunner {
                     continue;
                 }
             }
-
 
             // logic to deal more cards to the player upon request. otherwise not. including logic to
             // stop dealing if the player busts(point value is over 21).
@@ -149,12 +153,11 @@ class GameRunner {
     }
 
     /**
-     * this method may be determined to be unnecessary. further work must be done.
-     * however, will continue to play with sufficient cards for all players.
+     * this method allows for the player to stop play at the end of any round.
      *
      * @return returns true when there still is a player left?
      */
-    private boolean playAnotherRound(Scanner userInput) {
+    private boolean playAnotherRound(@NotNull Scanner userInput) {
         System.out.println("Would you like to play another Round? 'yes' or 'no' ?");
         String text = userInput.nextLine();
         if (text.equalsIgnoreCase("yes") ||

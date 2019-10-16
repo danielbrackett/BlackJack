@@ -2,11 +2,12 @@ class Player {
 
     private Hand hand;
     private String playerName;
+    protected Tokens tokens;
 
     public Player(String playerName) {
         this.playerName = playerName;
         setHand(new Hand());
-//        int bank = 100; relates to the winnings. can they still play.
+        setTokens(new Tokens());
     }
 
     public String getPlayerName() {
@@ -21,7 +22,20 @@ class Player {
         return hand;
     }
 
+    public boolean isHandEnmpty() {
+        return hand.isHandEmpty();
+    }
+
+    public Tokens getTokens() { return tokens; }
+
     private void setHand(Hand hand) {
         this.hand = hand;
+    }
+
+    private void setTokens(Tokens tokens) { this.tokens = tokens; }
+
+    public int placeBet(int amount) {
+        tokens.total = tokens.total - amount;
+        return amount;
     }
 }
