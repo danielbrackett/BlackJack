@@ -1,9 +1,21 @@
-public class Tokens {
+public class Bank {
 
-    int total;
+    private int balance;
 
-    public int getTotal() {
-        return total;
+    Bank() {
+        this.balance = 1000; //simoleons
+    }
+
+    int getBalance() {
+        return balance;
+    }
+
+    int withdraw(int amount) {
+        return balance -= amount;
+    }
+
+    int deposit(int amount) {
+        return balance += amount;
     }
 
 //    public void addWinningsToTokens(int winnings) {
