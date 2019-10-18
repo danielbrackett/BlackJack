@@ -17,11 +17,4 @@ public class Bank {
     int deposit(int amount) {
         return balance += amount;
     }
-
-//    public void addWinningsToTokens(int winnings) {
-//        total += winnings;
-//    }
-//
-//    public void subtractLossesFromTokens(int losses) { total += losses; }
-
 }
