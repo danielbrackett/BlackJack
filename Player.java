@@ -1,13 +1,13 @@
 class Player {
 
+    private Bank bank;
     private Hand hand;
     private String playerName;
-    protected Tokens tokens;
 
     public Player(String playerName) {
         this.playerName = playerName;
         setHand(new Hand());
-        setTokens(new Tokens());
+        setBank(new Bank());
     }
 
     public String getPlayerName() {
@@ -22,20 +22,19 @@ class Player {
         return hand;
     }
 
-    public boolean isHandEnmpty() {
-        return hand.isHandEmpty();
-    }
-
-    public Tokens getTokens() { return tokens; }
-
     private void setHand(Hand hand) {
         this.hand = hand;
     }
 
-    private void setTokens(Tokens tokens) { this.tokens = tokens; }
+    public boolean isHandEmpty() {
+        return hand.isHandEmpty();
+    }
 
-    public int placeBet(int amount) {
-        tokens.total = tokens.total - amount;
-        return amount;
+    public Bank getBank() {
+        return bank;
+    }
+
+    private void setBank(Bank bank) {
+        this.bank = bank;
     }
 }
