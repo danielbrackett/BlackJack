@@ -7,17 +7,26 @@ class GameRunner {
 
     private final Player dealer = new Player("Dealer");
     private final Player player = new Player("");
-    private final Bet bet = new Bet();
     private final RoundEvaluator evaluator = new RoundEvaluator();
     private boolean stillPlaying = true;
+    private final int betAmount = 4; // only paid to the dealer.
+    private final int betSettlement = 6; // only paid to the player.
+    private final int initialBankBalance = player.getBank().getBalance();
 
     void run() {
+        /*
+         * 1. ensure that that player cannot set player.name as "Dealer", or simil* 2. set the betting limit or set a standard bet for the 'table'
+         * 4. all bets(outside of insurance or doubling down or splitting a pair) pay out at 1.5 times the bet amount.
+         */
+        if (true);
         Scanner userInput = new Scanner(System.in);
         System.out.println("What is your name?");
         String nameInput = userInput.nextLine();
         player.setPlayerName(nameInput);
-        System.out.println("Let's play some BlackJack, " + nameInput + ".");
-        System.out.println("The Stakes at this table are 5 tokens a hand.");
+        System.out.println("Let's play some BlackJack, " + player.getPlayerName() + ".");
+        System.out.println("The stakes at this table are 4 credits a hand.");
+        System.out.println("You, the player, can end the game at the end of any round or the Game will end if " +
+                "your Bank balance is less than the minimum required bet.");
 
         Deck deck = new Deck();
         deck.shuffle();
@@ -26,25 +35,25 @@ class GameRunner {
          * if either busts then the round is over. while the player has more points than the dealer
          * and the dealer has at least 17 then the round is over.
          */
-        while (stillPlaying && player.getTokens().getTotal() > 0) {
-            if (player.getHand().getCardsInHand().isEmpty()) {
-                if (player.isHandEnmpty() && bet.getPot() == 0) {
-                    bet.addToPot(player.placeBet(bet.getBetAmount()));
-                }
+        while (stillPlaying && player.getBank().getBalance() > 0) {
+            System.out.println(deck.getDeckSize());
+            if (player.isHandEmpty()) {
                 deal(deck);
                 System.out.println(dealer.getPlayerName() + "'s cards: " + dealer.getHand().getCardsInHand().get(0));
                 System.out.println(player.getPlayerName() + "'s cards: " + player.getHand());
                 Player winner = evalFirstRoundPlayersHands();
                 if (winner != null) {
+                    printAllHands();
                     allHandsAreDiscarded(deck);
                     System.out.println(winner.getPlayerName() + " winner winner chicken dinner!");
                     askPlayerAnotherRoundDialogue(userInput);
-                    continue;
                 }
             }
 
-            // logic to deal more cards to the player upon request. otherwise not. including logic to
-            // stop dealing if the player busts(point value is over 21).
+            /*
+              logic to deal more cards to the player upon request. otherwise not. including logic to
+              stop dealing if the player busts(point value is over 21).
+            */
             boolean canStillHit = evaluator.isPlayersHandLT21(player);
 
             while (canStillHit) {
@@ -62,45 +71,51 @@ class GameRunner {
                 }
             }
 
-            /**
-             * if the dealer hasn't met the 17 threshold,
-             * return true
+            /*
+              if the dealer hasn't met the 17 threshold,
+              return true
              */
             while (evaluator.mustDealerTakeACard(dealer, player)) {
                 final Card dealt = deck.dealOneCardFromDeck();
                 final Hand dealerHand = dealer.getHand();
                 dealerHand.addCardToHand(dealt);
-                System.out.println("Dealer is dealt a new card.");
+                System.out.println("Dealer takes a new card.");
             }
 
-            /**
-             * did the player go bust?
+            /*
+              did the player go bust?
              */
-//            System.out.println("beginning the eval logic flow.");
             if (evaluator.isBusted(player)) {
                 System.out.println("oops that's a bust buster. lol. Better Luck next time " + player.getPlayerName() + ".");
                 printAllHands();
                 allHandsAreDiscarded(deck);
+                System.out.println("dealer");
+
+                evaluator.payDealer(player, dealer, betAmount);
                 askPlayerAnotherRoundDialogue(userInput);
-                /**
-                 * did the player win?
+                /*
+                  did the player win?
                  */
             } else if (evaluator.didPlayerWin(player, dealer)) {
                 printAllHands();
                 System.out.println(player.getPlayerName() + " is the winner! of this round.");
                 allHandsAreDiscarded(deck);
+                System.out.println("player");
+                evaluator.payPlayer(player, dealer, betSettlement);
                 askPlayerAnotherRoundDialogue(userInput);
-                /**
-                 * did the dealer win?
+                /*
+                  did the dealer win?
                  */
             } else if (evaluator.didDealerWin(player, dealer)) {
                 printAllHands();
                 System.out.println(dealer.getPlayerName() + " is the winner! of this round.");
                 allHandsAreDiscarded(deck);
+                System.out.println("dealer");
+                evaluator.payDealer(player, dealer, betAmount);
                 askPlayerAnotherRoundDialogue(userInput);
-                /**
-                 * the dealer and the player have the same score the result is a push all parties get their bets back
-                 *  no one wins.
+                /*
+                  the dealer and the player have the same score the result is a push all parties get their bets back
+                   no one wins.
                  */
             } else if (evaluator.didNoOneWin(player, dealer)) {
                 printAllHands();
@@ -110,7 +125,9 @@ class GameRunner {
             }
             timeToRefreshTheDeck(deck);
         }
-//  Note; END OF run()
+/*
+ * Note; END OF run()
+ */
     }
 
     /**
@@ -129,7 +146,6 @@ class GameRunner {
     private Player evalFirstRoundPlayersHands() {
         Player winner = evaluator.isThereBlackJack(player, dealer);
         if (winner != null) return winner;
-        if (evaluator.isDealerUnableToHitAndPlayerWins(player, dealer)) return player;
         return null;
     }
 
@@ -178,9 +194,23 @@ class GameRunner {
     }
 
     private void askPlayerAnotherRoundDialogue(Scanner userInput) {
-        if (playAnotherRound(userInput)) stillPlaying = true;
+        //# TODO add logic to inform user that their bank balance is too low to continue.
+        System.out.println("Your current balance is " + player.getBank().getBalance());
+        if (playAnotherRound(userInput) && evaluator.isBalanceSufficient(player, betAmount)) {
+            stillPlaying = true;
+        }
         else {
+            int endBalance = player.getBank().getBalance();
+            int difference = Math.abs(endBalance - 100);
             System.out.println(player.getPlayerName() + ", goodbye for now.");
+            System.out.println(player.getPlayerName() + "'s bank balance = " + endBalance);
+            if(endBalance > initialBankBalance) {
+                System.out.println("You were up by $" + difference);
+            } else if (initialBankBalance > endBalance) {
+                System.out.println("You lost $" + difference);
+            } else {
+                System.out.println("You broke even, you lucky dog!");
+            }
             stillPlaying = false;
         }
     }
