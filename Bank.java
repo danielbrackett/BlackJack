@@ -10,11 +10,11 @@ public class Bank {
         return balance;
     }
 
-    int withdraw(int amount) {
-        return balance -= amount;
+    void withdraw(int amount) {
+        balance -= amount;
     }
 
-    int deposit(int amount) {
-        return balance += amount;
+    void deposit(int amount) {
+        balance += amount;
     }
 }
