@@ -89,8 +89,6 @@ class GameRunner {
                 System.out.println("oops that's a bust buster. lol. Better Luck next time " + player.getPlayerName() + ".");
                 printAllHands();
                 allHandsAreDiscarded(deck);
-                System.out.println("dealer");
-
                 evaluator.payDealer(player, dealer, betAmount);
                 askPlayerAnotherRoundDialogue(userInput);
                 /*
@@ -100,7 +98,6 @@ class GameRunner {
                 printAllHands();
                 System.out.println(player.getPlayerName() + " is the winner! of this round.");
                 allHandsAreDiscarded(deck);
-                System.out.println("player");
                 evaluator.payPlayer(player, dealer, betSettlement);
                 askPlayerAnotherRoundDialogue(userInput);
                 /*
@@ -110,7 +107,6 @@ class GameRunner {
                 printAllHands();
                 System.out.println(dealer.getPlayerName() + " is the winner! of this round.");
                 allHandsAreDiscarded(deck);
-                System.out.println("dealer");
                 evaluator.payDealer(player, dealer, betAmount);
                 askPlayerAnotherRoundDialogue(userInput);
                 /*
