@@ -1,6 +1,6 @@
 public class RoundEvaluator {
 
-    /**
+    /*
      * Java Default constructor is used.
      */
 
@@ -54,5 +54,23 @@ public class RoundEvaluator {
     public boolean didNoOneWin(Player player, Player dealer) {
         return dealer.getHand().valueOfCardsInHand() ==
                 player.getHand().valueOfCardsInHand();
+    }
+
+    public boolean isBalanceSufficient(Player player, int betAmount) {
+        return player.getBank().getBalance() >= betAmount;
+    }
+
+    /*
+    will look into refactoring this code, I'd like to be able to set a final amount for the payout and settlement of bets
+    in a way that would not necessitate the passing of this value. thinking...
+     */
+    public void payDealer(Player player, Player dealer, int betAmount) {
+        player.getBank().withdraw(betAmount);
+        dealer.getBank().deposit(betAmount);
+    }
+
+    public void payPlayer(Player player, Player dealer, int betSettlement) {
+        dealer.getBank().withdraw(betSettlement);
+        player.getBank().deposit(betSettlement);
     }
 }
