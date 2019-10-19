@@ -14,11 +14,10 @@ class GameRunner {
     private final int initialBankBalance = player.getBank().getBalance();
 
     void run() {
-        /*
-         * 1. ensure that that player cannot set player.name as "Dealer", or simil* 2. set the betting limit or set a standard bet for the 'table'
-         * 4. all bets(outside of insurance or doubling down or splitting a pair) pay out at 1.5 times the bet amount.
+        /* #TODO
+         * 1. ensure that that player cannot set player.name as "Dealer", or similar 2.
+         *    set the betting limit or set a standard bet for the 'table'
          */
-        if (true);
         Scanner userInput = new Scanner(System.in);
         System.out.println("What is your name?");
         String nameInput = userInput.nextLine();
@@ -29,7 +28,7 @@ class GameRunner {
                 "your Bank balance is less than the minimum required bet.");
 
         Deck deck = new Deck();
-        deck.shuffle();
+        deck.easyShuffle();
 
         /*
          * if either busts then the round is over. while the player has more points than the dealer
