@@ -25,6 +25,12 @@ class Deck {
         }
     }
 
+    private void createMultipleDecks() {
+        /*
+        join <N> decks together to make a multi-deck of size <N> * 52
+         */
+    }
+
     /**
      * home brewed shuffle method. dump the ArrayDeque<Card> -> Card[] -> ArrayList<Card>
      * then shuffle, then return
