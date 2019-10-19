@@ -3,7 +3,7 @@ public class Bank {
     private int balance;
 
     Bank() {
-        this.balance = 1000; //simoleons
+        this.balance = 100; //simoleons
     }
 
     int getBalance() {
